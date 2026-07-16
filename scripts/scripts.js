@@ -26,6 +26,7 @@ const editButton = document.querySelector(".edit-contact");
 
 let contacts = [];
 let currentContact = null;
+let isCreating = false;
 
 function getInitials(fullName) {
     return fullName
@@ -73,6 +74,8 @@ async function fetchJSON() {
 }
 
 function editContact() {
+    isCreating = false;
+
     if (!currentContact) return;
 
     formName.value = currentContact.name;
@@ -229,7 +232,7 @@ function saveContact() {
         return;
     }
 
-    if (currentContact) {
+    if (!isCreating) {
 
         currentContact.name = formName.value.trim();
         currentContact.phone = formPhone.value.trim();
@@ -260,21 +263,29 @@ function saveContact() {
 
     allContacts(contacts);
 
+    isCreating = false;
+
     clearForm();
     showDetails();
 }
 
 function formForContact() {
     addButton.addEventListener("click", () => {
-        currentContact = null;
+        isCreating = true;
 
         clearForm();
         showForm();
     });
 
     cancelButton.addEventListener("click", () => {
+        isCreating = false;
+
         clearForm();
         showDetails();
+
+        if (currentContact) {
+            renderContactDetails(currentContact);
+        }
     });
 
     saveButton.addEventListener("click", saveContact);
