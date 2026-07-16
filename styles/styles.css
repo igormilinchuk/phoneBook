@@ -42,7 +42,6 @@ body{
     gap: 5px;
     border-radius: 10px;
     border: 1px solid black;
-    box-sizing: border-box;
 }
 
 @media (max-width: 768px){
@@ -130,7 +129,6 @@ body{
     border-radius: 8px;
     border: 1px solid var(--border);
     font-size: 16px;
-    box-sizing: border-box;
 }
 
 .search input:focus {
