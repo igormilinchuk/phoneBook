@@ -215,3 +215,144 @@ body{
     color: var(--text-secondary);
     font-size: 14px;
 }
+
+.details{
+    flex: 2;
+    background-color: #ffff;
+    border-radius: 10px;
+    padding: 20px;
+    min-width:0;
+}
+
+.details-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+@media (max-width:900px){
+
+    .details-header{
+
+        flex-direction:column;
+        align-items:flex-start;
+        gap:20px;
+
+    }
+
+}
+
+.contact-summary{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.contact-info{
+    display: flex;
+    flex-direction: row;
+    gap: 14px;
+}
+
+.contact-info h1{
+    margin: 0;
+    font-size: 28px;
+}
+.contact-info p{
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+
+.contact-actions{
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+}
+
+.edit-contact,
+.delete-contact {
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.edit-contact {
+    background-color: transparent;
+    color: #4B5563;
+    border: 1px solid #D1D5DB;
+}
+
+.edit-contact:hover {
+    background-color: #F3F4F6;
+    color: #1F2937;
+    border-color: #9CA3AF;
+}
+
+.edit-contact:active {
+    background-color: #E0E2E5;
+}
+
+
+.delete-contact {
+    background-color: #FEE2E2;
+    color: #DC2626;
+    border: 1px solid #FCA5A5;
+}
+
+.delete-contact:hover {
+    background-color: #DC2626;
+    color: white;
+    border-color: #DC2626;
+}
+
+.delete-contact:active {
+    background-color: #991B1B;
+    border-color: #991B1B;
+}
+
+.details-card {
+    border: 1px solid #D9E2F2;
+    border-radius: 12px;
+}
+
+.detail-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    align-items: center;
+    padding: 24px 28px;
+    border-bottom: 1px solid #ECECEC;
+}
+
+@media (max-width:600px){
+
+    .detail-row{
+
+        grid-template-columns:1fr;
+        gap:8px;
+
+    }
+
+}
+
+.detail-label {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #8A94A6;
+}
+
+.detail-value {
+    margin: 0;
+    font-size: 18px;
+    color: #16233B;
+    line-height: 1.5;
+    overflow-wrap:anywhere;
+}
