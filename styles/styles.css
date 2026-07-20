@@ -1,18 +1,76 @@
 :root{
+    --bg: #FFFFFF;
+    --bg-secondary: #F6F8FC;
+    --bg-card: #FCFDFF;
+
+    --secondary-btn-bg: transparent;
+    --secondary-btn-border: #D1D5DB;
+    --secondary-btn-text: #4B5563;
+    --secondary-btn-hover: #F3F4F6;
+    --secondary-btn-hover-text: #1F2937;
+    --secondary-btn-active: #E5E7EB;
+
     --font-body: "Roboto", sans-serif;
-    --background-color: white;
-    --text-color: #16233B;
-    --text-color-another: #C93B3B;
-    --primary:#3366E8;
-    --primary-hover:#2552CB;
 
-    --danger:#DC2626;
+    --text: #16233B;
+    --text-secondary: #6B7280;
+    --text-inverse: #FFFFFF;
 
-    --border:#D9E2F2;
+    --primary: #3366E8;
+    --primary-hover: #2552CB;
 
-    --text:#16233B;
+    --border: #E5E7EB;
+    --border-light: #ECECEC;
 
-    --text-secondary:#6B7280;
+    --hover: #E7F0FF;
+    --active: #DDEBFF;
+
+    --input-bg: #FFFFFF;
+    --input-border: #D9E2F2;
+
+    --danger-bg: #FEE2E2;
+    --danger-border: #FCA5A5;
+    --danger-text: #DC2626;
+    --danger-hover: #B91C1C;
+    --danger-active: #991B1B;
+
+    --shadow-focus: rgba(79,124,255,.3);
+}
+
+[data-theme="dark"]{
+
+    --bg: #111827;
+    --bg-secondary: #1F2937;
+    --bg-card: #243041;
+
+    --secondary-btn-border:#4B5563;
+    --secondary-btn-text:#E5E7EB;
+    --secondary-btn-hover:#374151;
+    --secondary-btn-hover-text: #F9FAFB;
+    --secondary-btn-active: #4B5563;
+
+    --text: #F9FAFB;
+    --text-secondary: #9CA3AF;
+    --text-inverse: #FFFFFF;
+
+    --primary: #4F7CFF;
+    --primary-hover: #648BFF;
+
+    --border: #374151;
+    --border-light: #475569;
+
+    --hover: #374151;
+    --active: #335FA8;
+
+    --input-bg: #1F2937;
+    --input-border: #4B5563;
+
+    --danger-bg: #3B1D1D;
+    --danger-border: #7F1D1D;
+    --danger-text: #F87171;
+    --danger-hover: #DC2626;
+    --danger-active: #991B1B;
+
 }
 
 *{
@@ -31,8 +89,12 @@ nav ul{
 }
 
 body{
-    background-color: var(--background-color);
-    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    transition:
+            background-color .25s,
+            color .25s,
+            border-color .25s;
 }
 
 .phonebook{
@@ -41,7 +103,7 @@ body{
     min-height: 100vh;
     gap: 5px;
     border-radius: 10px;
-    border: 1px solid black;
+    border: 1px solid var(--border);
 }
 
 @media (max-width: 768px){
@@ -55,7 +117,7 @@ body{
 .sidebar{
     flex: 1;
     height: 100vh;
-    background-color: #F6F8FC;
+    background: var(--bg-secondary);
     border-radius: 10px;
     padding: 20px;
     min-width:300px;
@@ -102,8 +164,30 @@ body{
 }
 
 .sidebar-actions{
-    display: flex;
-    align-items: center;
+    display:flex;
+    gap:10px;
+}
+
+#theme-button{
+    width:42px;
+    height:42px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    border:1px solid var(--border);
+    border-radius:8px;
+
+    background:var(--bg-card);
+    color:var(--text);
+
+    cursor:pointer;
+    transition:.2s;
+}
+
+#theme-button:hover{
+    background:var(--secondary-btn-hover);
 }
 
 .add-contact{
@@ -111,7 +195,7 @@ body{
     border-radius: 8px;
     border: none;
     background-color: var(--primary);
-    color: white;
+    color: var(--text-inverse);
     cursor: pointer;
 }
 
@@ -124,17 +208,23 @@ body{
 }
 
 .search input{
+    background: var(--input-bg);
     width: 100%;
     padding: 12px 16px;
     border-radius: 8px;
-    border: 1px solid var(--border);
+    border:1px solid var(--input-border);
+    color: var(--text);
     font-size: 16px;
+}
+
+.search input::placeholder{
+    color: var(--text-secondary);
 }
 
 .search input:focus {
     border-color: var(--primary);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(51, 102, 232, 0.2);
+    box-shadow:0 0 0 3px var(--shadow-focus);
 }
 
 .contact-group{
@@ -151,8 +241,8 @@ body{
 }
 
 .contact--active{
-    background-color: mediumaquamarine;
-    color: white;
+    background: var(--active);
+    color: var(--text);
     font-weight: bold;
 }
 
@@ -170,7 +260,7 @@ body{
 }
 
 .contacts-list li:hover {
-    background-color: dimgrey;
+    background:var(--hover);
 }
 
 .avatar {
@@ -179,7 +269,7 @@ body{
     align-items: center;
     border-radius: 50%;
     background: var(--primary);
-    color: white;
+    color: var(--text-inverse);
     font-weight: 700;
     overflow: hidden;
     flex-shrink: 0;
@@ -204,6 +294,7 @@ body{
 }
 
 .contact-name {
+    color: var(--text);
     margin: 0;
     font-weight: 600;
 }
@@ -216,7 +307,7 @@ body{
 
 .details{
     flex: 2;
-    background-color: #ffff;
+    background: var(--bg-card);
     border-radius: 10px;
     padding: 20px;
     min-width:0;
@@ -256,6 +347,7 @@ body{
 .contact-info h1{
     margin: 0;
     font-size: 28px;
+    color: var(--text);
 }
 .contact-info p{
     margin: 0;
@@ -281,41 +373,41 @@ body{
 }
 
 .edit-contact {
-    background-color: transparent;
-    color: #4B5563;
-    border: 1px solid #D1D5DB;
+    background: var(--secondary-btn-bg);
+    color: var(--secondary-btn-text);
+    border: 1px solid var(--secondary-btn-border);
 }
 
 .edit-contact:hover {
-    background-color: #F3F4F6;
-    color: #1F2937;
-    border-color: #9CA3AF;
+    background: var(--secondary-btn-hover);
+    color: var(--secondary-btn-text);
+    border-color: var(--secondary-btn-border);
 }
 
 .edit-contact:active {
-    background-color: #E0E2E5;
+    background-color: var(--secondary-btn-active);
 }
 
 
 .delete-contact {
-    background-color: #FEE2E2;
-    color: #DC2626;
-    border: 1px solid #FCA5A5;
+    background: var(--danger-bg);
+    color: var(--danger-text);
+    border:1px solid var(--danger-border);
 }
 
 .delete-contact:hover {
-    background-color: #DC2626;
-    color: white;
-    border-color: #DC2626;
+    background: var(--danger-hover);
+    color: var(--text-inverse);
+    border-color: var(--danger-hover);
 }
 
 .delete-contact:active {
-    background-color: #991B1B;
-    border-color: #991B1B;
+    background: var(--danger-active);
+    border-color: var(--danger-active);
 }
 
 .details-card {
-    border: 1px solid #D9E2F2;
+    border:1px solid var(--border);
     border-radius: 12px;
 }
 
@@ -324,7 +416,7 @@ body{
     grid-template-columns: 140px 1fr;
     align-items: center;
     padding: 24px 28px;
-    border-bottom: 1px solid #ECECEC;
+    border-bottom:1px solid var(--border-light);
 }
 
 @media (max-width:600px){
@@ -344,13 +436,13 @@ body{
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: #8A94A6;
+    color: var(--text-secondary);
 }
 
 .detail-value {
     margin: 0;
     font-size: 18px;
-    color: #16233B;
+    color: var(--text);
     line-height: 1.5;
     overflow-wrap:anywhere;
 }
@@ -362,7 +454,8 @@ body{
     flex-direction: column;
     gap: 24px;
     padding: 20px;
-    background: #fff;
+    border-radius: 10px;
+    background: var(--bg-card);
 }
 
 .hidden {
@@ -373,6 +466,11 @@ body{
     display: flex;
     flex-direction: column;
     gap: 16px;
+    color: var(--text);
+}
+
+.form-title{
+    color: var(--text);
 }
 
 .form-body label {
@@ -385,9 +483,17 @@ body{
 .form-body input,
 .form-body textarea {
     padding: 12px;
-    border: 1px solid #D9E2F2;
+    background: var(--input-bg);
+    color: var(--text);
+
+    border:1px solid var(--input-border);
     border-radius: 8px;
     font-size: 16px;
+}
+
+.form-body input::placeholder,
+.form-body textarea::placeholder{
+    color: var(--text-secondary);
 }
 
 .form-actions {
@@ -408,7 +514,7 @@ body{
 
 .save-contact{
     background: var(--primary);
-    color: white;
+    color: var(--text-inverse);
 }
 
 .save-contact:hover{
@@ -426,7 +532,7 @@ body{
 }
 
 .cancel-contact:hover{
-    background: #F3F4F6;
+    background: var(--secondary-btn-hover);
     color: var(--text);
 }
 

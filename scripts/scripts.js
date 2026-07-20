@@ -13,6 +13,8 @@ const formSection = document.querySelector(".contact-form");
 
 const searchInput = document.getElementById("search")
 
+const themeButton = document.getElementById("theme-button");
+
 const formName = document.getElementById("form-name");
 const formPhone = document.getElementById("form-phone");
 const formEmail = document.getElementById("form-email");
@@ -46,6 +48,8 @@ function formatDate(dateString) {
 }
 
 async function init() {
+    loadTheme();
+
     contacts = await fetchJSON();
 
     allContacts(contacts)
@@ -59,6 +63,8 @@ async function init() {
 
     deleteButton.addEventListener("click", deleteContact);
     editButton.addEventListener("click", editContact);
+
+    themeButton.addEventListener("click", toggleTheme);
 }
 
 
@@ -289,6 +295,47 @@ function formForContact() {
     });
 
     saveButton.addEventListener("click", saveContact);
+}
+
+function setTheme(theme){
+
+    document.documentElement.setAttribute("data-theme", theme);
+
+    localStorage.setItem("theme", theme);
+
+    themeButton.innerHTML =
+        theme === "dark"
+            ? '<i data-lucide="sun"></i>'
+            : '<i data-lucide="moon"></i>';
+
+    lucide.createIcons();
+}
+
+function toggleTheme(){
+
+    const currentTheme =
+        document.documentElement.getAttribute("data-theme");
+
+    if(currentTheme === "dark"){
+        setTheme("light");
+    }else{
+        setTheme("dark");
+    }
+
+}
+
+function loadTheme() {
+
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme) {
+        setTheme(savedTheme);
+        return;
+    }
+
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+    setTheme(prefersDark ? "dark" : "light");
 }
 
 init();
