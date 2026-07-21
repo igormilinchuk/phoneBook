@@ -99,24 +99,19 @@ body{
 
 .phonebook{
     display: flex;
+    min-height:0;
+    overflow:hidden;
     flex-direction: row;
-    min-height: 100vh;
+    height: 100dvh;
     gap: 5px;
     border-radius: 10px;
     border: 1px solid var(--border);
 }
 
-@media (max-width: 768px){
-
-    .phonebook{
-        flex-direction:column;
-    }
-
-}
-
 .sidebar{
     flex: 1;
-    height: 100vh;
+    display: flex;
+    flex-direction: column;
     background: var(--bg-secondary);
     border-radius: 10px;
     padding: 20px;
@@ -228,26 +223,15 @@ body{
 }
 
 .contact-group{
-    display: flex;
     flex:1;
-    flex-direction: column;
-    overflow-y: auto;
+    min-height:0;
+    overflow-y:auto;
 }
 
 .contacts-list{
     list-style: none;
     margin: 0;
     padding: 0;
-}
-
-.contact--active{
-    background: var(--active);
-    color: var(--text);
-    font-weight: bold;
-}
-
-.contacts-list {
-    max-height: 70vh;
 }
 
 .contacts-list li {
@@ -259,8 +243,16 @@ body{
     cursor: pointer;
 }
 
-.contacts-list li:hover {
-    background:var(--hover);
+@media (hover: hover) and (pointer: fine) {
+    .contacts-list li:not(.contact--active):hover {
+        background: var(--hover);
+    }
+}
+
+.contact--active {
+    background: var(--active);
+    font-weight: 600;
+    border-left: 4px solid var(--primary);
 }
 
 .avatar {
@@ -307,10 +299,11 @@ body{
 
 .details{
     flex: 2;
+    min-height: 0;
+    overflow-y: auto;
     background: var(--bg-card);
     border-radius: 10px;
     padding: 20px;
-    min-width:0;
 }
 
 .details-header {
@@ -329,6 +322,75 @@ body{
         align-items:flex-start;
         gap:20px;
 
+    }
+
+}
+
+@media (max-height:570px){
+
+    .details{
+        padding:12px;
+    }
+
+    .details-header{
+        margin-bottom:16px;
+    }
+
+    .avatar-large{
+        width:70px;
+        height:70px;
+        font-size:24px;
+    }
+
+    .detail-row{
+        padding:16px 20px;
+    }
+
+}
+.secondary-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px 18px;
+
+    border-radius: 8px;
+    border: 1px solid var(--secondary-btn-border);
+
+    background: var(--secondary-btn-bg);
+    color: var(--secondary-btn-text);
+
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+
+    transition: all .2s ease;
+}
+
+.secondary-button svg {
+    width: 18px;
+    height: 18px;
+}
+
+.secondary-button:hover {
+    background: var(--secondary-btn-hover);
+    color: var(--secondary-btn-hover-text);
+}
+
+.secondary-button:active {
+    background: var(--secondary-btn-active);
+    transform: scale(.98);
+}
+
+#back-button {
+    display: none;
+
+}
+
+@media (max-width: 768px) {
+
+    #back-button {
+        display: flex;
     }
 
 }

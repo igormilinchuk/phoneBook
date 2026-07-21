@@ -8,12 +8,14 @@ const detailsAvatar = document.querySelector(".avatar-large");
 
 const savedContacts = document.querySelector(".saved-contacts");
 
+const sidebarSection = document.querySelector(".sidebar");
 const detailsSection = document.querySelector(".details");
 const formSection = document.querySelector(".contact-form");
 
 const searchInput = document.getElementById("search")
 
 const themeButton = document.getElementById("theme-button");
+const backButton = document.getElementById("back-button");
 
 const formName = document.getElementById("form-name");
 const formPhone = document.getElementById("form-phone");
@@ -48,23 +50,27 @@ function formatDate(dateString) {
 }
 
 async function init() {
+
+    window.addEventListener("resize", updateLayout);
+
     loadTheme();
 
     contacts = await fetchJSON();
 
-    allContacts(contacts)
-    renderContacts(contacts);
+    sortContacts();
 
-    if (contacts.length > 0) {
-        renderContactDetails(contacts[0]);
+    updateContactsCount();
+
+    if (contacts.length) {
+        currentContact = contacts[0];
+        renderContacts(contacts);
+        renderContactDetails(currentContact);
+    } else {
+        renderContacts([]);
     }
-    searchContacts(contacts)
-    formForContact()
 
-    deleteButton.addEventListener("click", deleteContact);
-    editButton.addEventListener("click", editContact);
-
-    themeButton.addEventListener("click", toggleTheme);
+    bindEvents();
+    updateLayout();
 }
 
 
@@ -76,6 +82,54 @@ async function fetchJSON() {
         return data;
     } catch (error) {
         console.error(error);
+    }
+}
+
+function bindEvents() {
+    deleteButton.addEventListener("click", deleteContact);
+    editButton.addEventListener("click", editContact);
+
+    cancelButton.addEventListener("click", () => {
+        isCreating = false;
+
+        clearForm();
+        showDetails();
+
+        if (currentContact) {
+            renderContactDetails(currentContact);
+        }
+    });
+    saveButton.addEventListener("click", saveContact);
+
+    themeButton.addEventListener("click", toggleTheme);
+    backButton.addEventListener("click", () => {
+        showList();
+    });
+
+    addButton.addEventListener("click", () => {
+        isCreating = true;
+        clearForm();
+        showForm();
+    });
+
+    searchContacts();
+}
+
+function sortContacts() {
+    const collator = new Intl.Collator(["uk", "en"], {
+        sensitivity: "base"
+    });
+
+    contacts.sort((a, b) => collator.compare(a.name, b.name));
+}
+
+function updateLayout() {
+    if (isMobile()) {
+        showList();
+    } else {
+        sidebarSection.classList.remove("hidden");
+        detailsSection.classList.remove("hidden");
+        formSection.classList.add("hidden");
     }
 }
 
@@ -103,66 +157,74 @@ function deleteContact() {
     contacts = contacts.filter(contact => contact.id !== currentContact.id);
 
     renderContacts(contacts);
-    allContacts(contacts);
+    updateContactsCount();
 
     if (contacts.length > 0) {
-        renderContactDetails(contacts[0]);
+
+        currentContact = contacts[0];
+
+        renderContacts(contacts);
+        renderContactDetails(currentContact);
+
     } else {
+
         currentContact = null;
+
+        renderContacts([]);
         clearContactDetails();
+
     }
 }
 
-function allContacts(contacts) {
-    const totalContacts = contacts.length
-
-    savedContacts.textContent = totalContacts + " saved";
+function updateContactsCount() {
+    savedContacts.textContent = `${contacts.length} saved`;
 }
-function renderContacts(arrayOfContacts) {
+
+function renderContacts(arrayOfContacts, activeId = null) {
     contactGroup.innerHTML = "";
 
     const ul = document.createElement("ul")
     ul.classList.add("contacts-list");
 
-    arrayOfContacts.forEach((contact, index) => {
+    arrayOfContacts.forEach((contact) => {
+
         const li = document.createElement("li");
         const div1 = document.createElement("div");
         const div2 = document.createElement("div");
         const p1 = document.createElement("p");
         const p2 = document.createElement("p");
 
-        div1.classList.add('avatar', 'avatar-small');
+        div1.classList.add("avatar", "avatar-small");
         div2.classList.add("contact-summary");
 
         p1.classList.add("contact-name");
         p2.classList.add("contact-meta");
 
         div1.textContent = getInitials(contact.name);
-
         p1.textContent = contact.name;
         p2.textContent = contact.phone || contact.email;
 
-        div2.appendChild(p1);
-        div2.appendChild(p2);
+        div2.append(p1, p2);
+        li.append(div1, div2);
 
-        li.appendChild(div1);
-        li.appendChild(div2);
-
-        ul.appendChild(li);
-
-        li.addEventListener("click", () => {
-            const activeItem = document.querySelector(".contact--active");
-            if (activeItem) {
-                activeItem.classList.remove("contact--active");
-            }
-            li.classList.add("contact--active");
-            renderContactDetails(contact);
-        })
-
-        if (index === 0) {
+        // активний контакт
+        if (currentContact && contact.id === currentContact.id) {
             li.classList.add("contact--active");
         }
-    })
+
+        li.addEventListener("click", () => {
+            currentContact = contact;
+
+            renderContacts(contacts);
+            renderContactDetails(contact);
+
+            if (isMobile()) {
+                showDetails();
+            }
+        });
+
+        ul.appendChild(li);
+    });
 
     contactGroup.appendChild(ul);
 
@@ -188,7 +250,7 @@ function clearContactDetails() {
     detailsNote.textContent = "";
 }
 
-function searchContacts(contacts) {
+function searchContacts() {
 
     searchInput.addEventListener("input", () => {
         const text = searchInput.value.toLowerCase().trim();
@@ -199,29 +261,60 @@ function searchContacts(contacts) {
             (contact.email || "").toLowerCase().includes(text)
         );
 
-        renderContacts(filteredContacts);
-
         if (filteredContacts.length > 0) {
-            renderContactDetails(filteredContacts[0]);
-        } else {
-            clearContactDetails()
 
-            const activeItem = document.querySelector(".contact--active");
-            if (activeItem) {
-                activeItem.classList.remove("contact--active");
-            }
+            currentContact = filteredContacts[0];
+
+            renderContacts(filteredContacts);
+            renderContactDetails(currentContact);
+
+        } else {
+
+            currentContact = null;
+
+            renderContacts([]);
+            clearContactDetails();
         }
     });
 }
 
-function showForm() {
-    detailsSection.classList.add("hidden");
-    formSection.classList.remove("hidden");
+function showList() {
+    if (!isMobile()) {
+        sidebarSection.classList.remove("hidden");
+        detailsSection.classList.remove("hidden");
+        formSection.classList.add("hidden");
+        return;
+    }
+
+    showScreen(sidebarSection);
 }
 
 function showDetails() {
+    if (!isMobile()) {
+        formSection.classList.add("hidden");
+        detailsSection.classList.remove("hidden");
+        return;
+    }
+
+    showScreen(detailsSection);
+}
+
+function showForm() {
+    if (!isMobile()) {
+        detailsSection.classList.add("hidden");
+        formSection.classList.remove("hidden");
+        return;
+    }
+
+    showScreen(formSection);
+}
+
+function showScreen(screen) {
+    sidebarSection.classList.add("hidden");
+    detailsSection.classList.add("hidden");
     formSection.classList.add("hidden");
-    detailsSection.classList.remove("hidden");
+
+    screen.classList.remove("hidden");
 }
 
 function clearForm() {
@@ -245,8 +338,9 @@ function saveContact() {
         currentContact.email = formEmail.value.trim();
         currentContact.note = formNote.value.trim();
 
-        renderContacts(contacts);
+        sortContacts();
         renderContactDetails(currentContact);
+        renderContacts(contacts);
 
     } else {
 
@@ -261,40 +355,20 @@ function saveContact() {
 
         contacts.push(newContact);
 
-        renderContacts(contacts);
-        renderContactDetails(newContact);
+        sortContacts();
 
         currentContact = newContact;
+
+        renderContacts(contacts);
+        renderContactDetails(currentContact);
     }
 
-    allContacts(contacts);
+    updateContactsCount();
 
     isCreating = false;
 
     clearForm();
     showDetails();
-}
-
-function formForContact() {
-    addButton.addEventListener("click", () => {
-        isCreating = true;
-
-        clearForm();
-        showForm();
-    });
-
-    cancelButton.addEventListener("click", () => {
-        isCreating = false;
-
-        clearForm();
-        showDetails();
-
-        if (currentContact) {
-            renderContactDetails(currentContact);
-        }
-    });
-
-    saveButton.addEventListener("click", saveContact);
 }
 
 function setTheme(theme){
@@ -338,4 +412,7 @@ function loadTheme() {
     setTheme(prefersDark ? "dark" : "light");
 }
 
+function isMobile() {
+    return window.innerWidth <= 768;
+}
 init();
