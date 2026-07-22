@@ -12,7 +12,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-header">
+    <header class="sidebar-header">
 
       <div class="sidebar-info">
         <h1>Contacts List</h1>
@@ -26,7 +26,7 @@
         <button class="add-contact" type="button">Add contact</button>
       </div>
 
-    </div>
+    </header>
 
     <div class="search">
       <label>
@@ -34,14 +34,12 @@
       </label>
     </div>
 
-    <div class="contact-group">
-
-    </div>
+    <nav class="contact-group" aria-label="Contacts"></nav>
   </aside>
 
   <section class="details hidden">
 
-    <div class="details-header">
+    <header class="details-header">
 
       <button class="secondary-button" id="back-button" type="button">
         <i data-lucide="arrow-left"></i>
@@ -65,7 +63,7 @@
         <button class="delete-contact" type="button">Delete</button>
       </div>
 
-    </div>
+    </header>
 
     <div class="details-card">
 
@@ -88,11 +86,11 @@
 
   </section>
 
-  <section class="contact-form hidden">
+  <form class="contact-form hidden">
 
-    <div class="form-header">
+    <header class="form-header">
       <h1 class="form-title">New Contact</h1>
-    </div>
+    </header>
 
     <div class="form-body">
       <label>
@@ -114,11 +112,16 @@
 
     </div>
 
-    <div class="form-actions">
-      <button class="save-contact">Save</button>
-      <button class="cancel-contact">Cancel</button>
-    </div>
-  </section>
+    <footer class="form-actions">
+      <button class="save-contact" type="submit">
+        Save
+      </button>
+      <button class="cancel-contact" type="button">
+        Cancel
+      </button>
+    </footer>
+
+  </form>
 
 </main>
 <script src="https://unpkg.com/lucide@latest"></script>

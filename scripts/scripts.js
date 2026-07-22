@@ -24,7 +24,7 @@ const formNote = document.getElementById("form-note");
 
 const addButton = document.querySelector(".add-contact");
 const cancelButton = document.querySelector(".cancel-contact");
-const saveButton = document.querySelector(".save-contact");
+const contactForm = document.querySelector(".contact-form");
 const deleteButton = document.querySelector(".delete-contact");
 const editButton = document.querySelector(".edit-contact");
 
@@ -99,7 +99,10 @@ function bindEvents() {
             renderContactDetails(currentContact);
         }
     });
-    saveButton.addEventListener("click", saveContact);
+    contactForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        saveContact();
+    });
 
     themeButton.addEventListener("click", toggleTheme);
     backButton.addEventListener("click", () => {
