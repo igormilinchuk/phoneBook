@@ -183,50 +183,86 @@ function updateContactsCount() {
     savedContacts.textContent = `${contacts.length} saved`;
 }
 
+function groupContactsByLetter(contacts) {
+
+    const sorted = [...contacts].sort((a, b) =>
+        a.name.localeCompare(b.name)
+    );
+
+    const groups = {};
+
+    sorted.forEach(contact => {
+
+        const letter = contact.name.charAt(0).toUpperCase();
+
+        if (!groups[letter]) {
+            groups[letter] = [];
+        }
+
+        groups[letter].push(contact);
+
+    });
+
+    return groups;
+}
+
 function renderContacts(arrayOfContacts, activeId = null) {
     contactGroup.innerHTML = "";
 
-    const ul = document.createElement("ul")
+    contactGroup.innerHTML = "";
+
+    const ul = document.createElement("ul");
     ul.classList.add("contacts-list");
 
-    arrayOfContacts.forEach((contact) => {
+    const groups = groupContactsByLetter(arrayOfContacts);
 
-        const li = document.createElement("li");
-        const div1 = document.createElement("div");
-        const div2 = document.createElement("div");
-        const p1 = document.createElement("p");
-        const p2 = document.createElement("p");
+    Object.entries(groups).forEach(([letter, contacts]) => {
 
-        div1.classList.add("avatar", "avatar-small");
-        div2.classList.add("contact-summary");
+        const letterLi = document.createElement("li");
+        letterLi.className = "contact-letter";
+        letterLi.textContent = letter;
 
-        p1.classList.add("contact-name");
-        p2.classList.add("contact-meta");
+        ul.appendChild(letterLi);
 
-        div1.textContent = getInitials(contact.name);
-        p1.textContent = contact.name;
-        p2.textContent = contact.phone || contact.email;
+        contacts.forEach(contact => {
 
-        div2.append(p1, p2);
-        li.append(div1, div2);
+            const li = document.createElement("li");
+            const div1 = document.createElement("div");
+            const div2 = document.createElement("div");
+            const p1 = document.createElement("p");
+            const p2 = document.createElement("p");
 
-        // активний контакт
-        if (currentContact && contact.id === currentContact.id) {
-            li.classList.add("contact--active");
-        }
+            div1.classList.add("avatar", "avatar-small");
+            div2.classList.add("contact-summary");
 
-        li.addEventListener("click", () => {
-            currentContact = contact;
+            p1.classList.add("contact-name");
+            p2.classList.add("contact-meta");
 
-            renderContacts(contacts);
-            renderContactDetails(contact);
+            div1.textContent = getInitials(contact.name);
+            p1.textContent = contact.name;
+            p2.textContent = contact.phone || contact.email;
 
-            if (isMobile()) {
-                showDetails();
+            div2.append(p1, p2);
+            li.append(div1, div2);
+
+            if (currentContact && contact.id === currentContact.id) {
+                li.classList.add("contact--active");
             }
+
+            li.addEventListener("click", () => {
+                currentContact = contact;
+
+                renderContacts(arrayOfContacts);
+                renderContactDetails(contact);
+
+                if (isMobile()) {
+                    showDetails();
+                }
+            });
+
+            ul.appendChild(li);
         });
 
-        ul.appendChild(li);
     });
 
     contactGroup.appendChild(ul);

@@ -226,6 +226,7 @@ body{
     background: var(--scrollbar-thumb-hover);
     background-clip: content-box;
 }
+
 /* Contact List */
 
 .contacts-list{
@@ -289,6 +290,25 @@ body{
     margin: 0;
     color: var(--text-secondary);
     font-size: 14px;
+}
+
+.contact-letter{
+    list-style: none;
+    cursor: default;
+
+    margin-top: 18px;
+    padding: 8px 12px;
+
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+
+    color: var(--text-secondary);
+}
+
+.contact-letter{
+    pointer-events: none;
 }
 
 /* Details */
